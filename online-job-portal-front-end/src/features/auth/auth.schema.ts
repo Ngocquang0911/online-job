@@ -28,7 +28,7 @@ export const jobSeekerSchema = z.object({
       return age >= 16;
     }, "You must be at least 16 years old"),
   phone: z.string()
-    .regex(/^0\d{9,10}$/, "Phone number must start with 0 and contain 10 or 11 digits"),
+    .regex(/^\d{10,11}$/, "Phone number must be 10 or 11 digits"),
   role: z.literal("job_seeker"),
   acceptTerms: z.boolean().refine((val) => val === true, {
     message: "You must accept the terms and policies"
@@ -66,7 +66,7 @@ export const recruiterSchema = z.object({
       return age >= 18;
     }, "You must be at least 18 years old"),
   phone: z.string()
-    .regex(/^0\d{9,10}$/, "Phone number must start with 0 and contain 10 or 11 digits"),
+    .regex(/^\d{10,11}$/, "Phone number must be 10 or 11 digits"),
   companyName: z.string()
     .min(2, "Company name must be at least 2 characters")
     .max(100, "Company name must not exceed 100 characters"),

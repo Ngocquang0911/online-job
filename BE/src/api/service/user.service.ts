@@ -24,7 +24,6 @@ import {
 } from "../modules/auth";
 import {
   validateEmailAvailability,
-  validatePhoneAvailability,
   validateUserAccount,
   checkAccountLockStatus,
   validatePasswordAndUpdateAttempts,
@@ -43,7 +42,6 @@ export const registerUser = async (
 ): Promise<any> => {
   try {
     await validateEmailAvailability((registrationData as any).email);
-    await validatePhoneAvailability((registrationData as any).phone);
 
     const role = (registrationData as any).role || UserRole.JOB_SEEKER;
 
@@ -82,9 +80,6 @@ export const registerRecruiter = async (
 ): Promise<any> => {
   // Validate email availability
   await validateEmailAvailability((dto as any).email);
-
-  // Validate phone availability
-  await validatePhoneAvailability((dto as any).phone);
 
   // Validate tax code uniqueness
   const existingCompany = await Company.findOne({ taxCode: dto.taxCode });

@@ -277,8 +277,8 @@ export function isValidEmail(email: string): boolean {
 export function isValidPhone(phone: string): boolean {
   // Remove all non-digit characters for validation
   const digitsOnly = phone.replace(/\D/g, '');
-  // Must start with 0 and contain 10 or 11 digits
-  return digitsOnly.startsWith('0') && digitsOnly.length >= 10 && digitsOnly.length <= 11;
+  // Accept 10-15 digits (covers most international formats)
+  return digitsOnly.length >= 10 && digitsOnly.length <= 15;
 }
 
 /**
