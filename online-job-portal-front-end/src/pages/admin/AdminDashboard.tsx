@@ -1,11 +1,31 @@
-import { Users, UserCheck, Package, FileText, TrendingUp, DollarSign } from 'lucide-react';
+import { Users, UserCheck, Package, FileText, TrendingUp, DollarSign, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { mockStats, mockJobPosts } from '@/data/mockAdminData';
 import { Badge } from '@/components/ui/badge';
 import StatsCard from '@/components/layouts/admin/StatsCard';
+import { useGetAdminDashboardStatsQuery } from '@/features/admin/api/admin.service';
 
 export default function AdminDashboard() {
-  const recentPosts = mockJobPosts.slice(0, 5);
+  const { data: response, isLoading, error } = useGetAdminDashboardStatsQuery();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        <span className="ml-2 text-gray-500 font-medium">Đang tải dữ liệu...</span>
+      </div>
+    );
+  }
+
+  if (error || !response?.success) {
+    return (
+      <div className="flex h-[400px] w-full items-center justify-center text-red-500 font-medium">
+        Không thể tải dữ liệu thống kê. Vui lòng thử lại sau!
+      </div>
+    );
+  }
+
+  const stats = response.data;
+  const recentPosts = stats.recentPosts || [];
 
   return (
     <div className="space-y-6">
@@ -13,29 +33,29 @@ export default function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Tổng người dùng"
-          value={mockStats.totalUsers}
-          change={`+${mockStats.monthlyGrowth}% so với tháng trước`}
-          changeType="positive"
+          value={stats.totalUsers}
+          change={`+${stats.monthlyGrowth}% so với tháng trước`}
+          changeType={stats.monthlyGrowth >= 0 ? "positive" : "negative"}
           icon={Users}
         />
         <StatsCard
           title="Job Seekers"
-          value={mockStats.totalJobSeekers}
+          value={stats.totalJobSeekers}
           change="Đang hoạt động"
           changeType="neutral"
           icon={UserCheck}
         />
         <StatsCard
           title="Recruiters"
-          value={mockStats.totalRecruiters}
+          value={stats.totalRecruiters}
           change="Đang hoạt động"
           changeType="neutral"
           icon={Users}
         />
         <StatsCard
           title="Doanh thu tháng"
-          value={`${(mockStats.totalRevenue / 1000000).toFixed(1)}M VNĐ`}
-          change="+15.2% so với tháng trước"
+          value={`${(stats.totalRevenue / 1000000).toFixed(1)}M VNĐ`}
+          change="Tháng này"
           changeType="positive"
           icon={DollarSign}
         />
@@ -45,30 +65,30 @@ export default function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Bài đăng chờ duyệt"
-          value={mockStats.pendingPosts}
+          value={stats.pendingPosts}
           change="Cần xử lý"
-          changeType="negative"
+          changeType={stats.pendingPosts > 0 ? "negative" : "neutral"}
           icon={FileText}
         />
         <StatsCard
           title="Bài đăng đã duyệt"
-          value={mockStats.approvedPosts}
-          change="Tháng này"
+          value={stats.approvedPosts}
+          change="Tất cả bài viết"
           changeType="positive"
           icon={FileText}
         />
         <StatsCard
           title="Gói đang hoạt động"
-          value={mockStats.activePackages}
+          value={stats.activePackages}
           change="Tất cả gói"
           changeType="neutral"
           icon={Package}
         />
         <StatsCard
           title="Tăng trưởng"
-          value={`${mockStats.monthlyGrowth}%`}
+          value={`${stats.monthlyGrowth}%`}
           change="Người dùng mới"
-          changeType="positive"
+          changeType={stats.monthlyGrowth >= 0 ? "positive" : "negative"}
           icon={TrendingUp}
         />
       </div>
@@ -81,33 +101,39 @@ export default function AdminDashboard() {
             <CardTitle>Bài đăng gần đây</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {recentPosts.map((post) => (
-                <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-sm">{post.title}</h4>
-                    <p className="text-xs text-gray-500">{post.company} • {post.location}</p>
-                    <p className="text-xs text-gray-400">Bởi {post.recruiterName}</p>
+            {recentPosts.length === 0 ? (
+              <div className="text-center py-6 text-gray-500 text-sm">
+                Không có bài đăng nào gần đây.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {recentPosts.map((post) => (
+                  <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-sm">{post.title}</h4>
+                      <p className="text-xs text-gray-500">{post.company} • {post.location}</p>
+                      <p className="text-xs text-gray-400">Bởi {post.recruiterName}</p>
+                    </div>
+                    <Badge 
+                      variant={
+                        post.status === 'approved' ? 'default' : 
+                        post.status === 'pending' ? 'secondary' : 
+                        'destructive'
+                      }
+                      className={
+                        post.status === 'approved' ? 'bg-green-100 text-green-800' :
+                        post.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }
+                    >
+                      {post.status === 'approved' ? 'Đã duyệt' : 
+                       post.status === 'pending' ? 'Chờ duyệt' : 
+                       'Từ chối'}
+                    </Badge>
                   </div>
-                  <Badge 
-                    variant={
-                      post.status === 'approved' ? 'default' : 
-                      post.status === 'pending' ? 'secondary' : 
-                      'destructive'
-                    }
-                    className={
-                      post.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      post.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }
-                  >
-                    {post.status === 'approved' ? 'Đã duyệt' : 
-                     post.status === 'pending' ? 'Chờ duyệt' : 
-                     'Từ chối'}
-                  </Badge>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -121,21 +147,21 @@ export default function AdminDashboard() {
               <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
                 <h4 className="font-medium text-orange-900">Bài đăng chờ duyệt</h4>
                 <p className="text-sm text-orange-700 mt-1">
-                  {mockStats.pendingPosts} bài đăng đang chờ được duyệt
+                  {stats.pendingPosts} bài đăng đang chờ được duyệt
                 </p>
               </div>
               
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-medium text-blue-900">Người dùng mới</h4>
+                <h4 className="font-medium text-blue-900">Người dùng hệ thống</h4>
                 <p className="text-sm text-blue-700 mt-1">
-                  12 người dùng đăng ký trong 24h qua
+                  Gồm {stats.totalJobSeekers} Job Seekers và {stats.totalRecruiters} Recruiters
                 </p>
               </div>
               
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-medium text-green-900">Doanh thu</h4>
+                <h4 className="font-medium text-green-900">Gói hoạt động</h4>
                 <p className="text-sm text-green-700 mt-1">
-                  Đạt 85% mục tiêu tháng này
+                  Có {stats.activePackages} gói đăng ký đang có hiệu lực
                 </p>
               </div>
             </div>

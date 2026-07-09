@@ -13,6 +13,7 @@ import type {
   UpdatePackageResponse,
   CreatePackageRequest,
   CreatePackageResponse,
+  GetAdminDashboardStatsResponse,
 } from "./admin.type";
 
 export const adminApi = baseApi.injectEndpoints({
@@ -88,6 +89,10 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Profile"],
     }),
+    getAdminDashboardStats: builder.query<GetAdminDashboardStatsResponse, void>({
+      query: () => ({ url: "admin/dashboard/stats", method: "GET" }),
+      providesTags: ["Users", "Jobs", "Refunds"],
+    }),
   }),
 });
 
@@ -100,4 +105,5 @@ export const {
   useDeleteSubscriptionPackageMutation,
   useUpdateSubscriptionPackageMutation,
   useCreateSubscriptionPackageMutation,
+  useGetAdminDashboardStatsQuery,
 } = adminApi;

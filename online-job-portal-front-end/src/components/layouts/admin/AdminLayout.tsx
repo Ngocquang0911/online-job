@@ -1,16 +1,9 @@
-import { useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
 
-import PackagesManagement from "@/pages/admin/PackagesManagement";
-import UsersManagement from "@/pages/admin/UsersManagement";
-import PostsManagement from "@/pages/admin/PostsManagement";
-import NotificationsManagement from "@/pages/admin/NotificationsManagement";
-import { ReportsManagement } from "@/pages/admin/ReportsManagement.tsx";
-import CompanyManagementPage from "@/pages/admin/CompanyManagementPage";
-import RefundManagement from "@/pages/admin/RefundManagement";
-
 const tabTitles = {
+  dashboard: "Dashboard",
   users: "User Management",
   packages: "Package Management",
   posts: "Post Management",
@@ -21,38 +14,28 @@ const tabTitles = {
 };
 
 export default function AdminLayout() {
-  const [activeTab, setActiveTab] = useState("users");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "users":
-        return <UsersManagement />;
-      case "packages":
-        return <PackagesManagement />;
-      case "posts":
-        return <PostsManagement />;
-      case "reports":
-        return <ReportsManagement />;
-      case "notifications":
-        return <NotificationsManagement />;
-      case "refunds":
-        return <RefundManagement />;
-      case "companies":
-        return <CompanyManagementPage />;
-      default:
-        return <UsersManagement />;
-    }
+  // Determine active tab from URL path (e.g. /admin/users -> users)
+  const pathParts = location.pathname.split("/");
+  const activeTab = pathParts[2] || "dashboard";
+
+  const handleTabChange = (tab: string) => {
+    navigate(`/admin/${tab}`);
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <AdminSidebar activeTab={activeTab} onTabChange={handleTabChange} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <AdminHeader
-          title={tabTitles[activeTab as keyof typeof tabTitles]}
-          onTabChange={setActiveTab}
+          title={tabTitles[activeTab as keyof typeof tabTitles] || "Admin"}
+          onTabChange={handleTabChange}
         />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">{renderContent()}</main>
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

@@ -14,6 +14,13 @@ import {
   ShieldCheck,
   Users,
   X,
+  Briefcase,
+  Heart,
+  Calendar,
+  MessageSquare,
+  User,
+  Flag,
+  Building2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -44,6 +51,18 @@ const getMenuItemsByRole = (role: string) => {
         { icon: FileText, label: "Posts", path: "/admin/posts" },
         { icon: Bell, label: "Notifications", path: "/admin/notifications" },
         { icon: ShieldCheck, label: "Settings", path: "/admin/settings" },
+      ];
+    case "job_seeker":
+      return [
+        { icon: User, label: "My Profile", path: "/profile" },
+        { icon: Briefcase, label: "Jobs", path: "/jobs" },
+        { icon: Building2, label: "Companies", path: "/companies" },
+        { icon: Heart, label: "Favorites", path: "/job-seeker/favorites" },
+        { icon: FileText, label: "Applications", path: "/job-seeker/applications" },
+        { icon: Calendar, label: "Interviews", path: "/job-seeker/interviews" },
+        { icon: MessageSquare, label: "Chat", path: "/chat" },
+        { icon: Flag, label: "Reports", path: "/job-seeker/my-reports" },
+        { icon: Settings, label: "Settings", path: "/job-seeker/settings" },
       ];
     default:
       return [];

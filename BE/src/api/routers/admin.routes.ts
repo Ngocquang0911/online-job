@@ -18,8 +18,24 @@ import {
   handleDeleteUser,
   handleRestoreUser
 } from "../controller/userManagement.controller";
+import { handleGetAdminDashboardStats } from "../controller/adminDashboard.controller";
 
 const adminRouter = Router();
+
+/**
+ * ============== DASHBOARD ROUTES ==============
+ */
+
+/**
+ * GET /api/v1/admin/dashboard/stats
+ * Lấy số liệu thống kê Dashboard Admin (Admin only)
+ */
+adminRouter.get(
+  "/dashboard/stats",
+  verifyToken,
+  requireRole(UserRole.ADMIN),
+  handleGetAdminDashboardStats
+);
 
 /**
  * ============== USER MANAGEMENT ROUTES ==============
