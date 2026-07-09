@@ -11,6 +11,7 @@ import {
   Flag,
   Bell,
   BriefcaseBusiness,
+  LayoutGrid,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/admin/button-custom";
@@ -23,6 +24,11 @@ interface AdminSidebarProps {
 }
 
 const menuItems = [
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: LayoutGrid,
+  },
   {
     id: "users",
     label: "User Management",

@@ -158,3 +158,27 @@ export interface CreatePackageResponse {
   message: string;
   data?: SubscriptionPackage;
 }
+
+export interface AdminDashboardStats {
+  totalUsers: number;
+  totalJobSeekers: number;
+  totalRecruiters: number;
+  totalRevenue: number;
+  pendingPosts: number;
+  approvedPosts: number;
+  activePackages: number;
+  monthlyGrowth: number;
+  recentPosts: {
+    id: string;
+    title: string;
+    company: string;
+    location: string;
+    recruiterName: string;
+    status: string;
+  }[];
+}
+
+export interface GetAdminDashboardStatsResponse {
+  success: boolean;
+  data: AdminDashboardStats;
+}

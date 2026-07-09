@@ -4,7 +4,13 @@ import { Route, Routes } from "react-router";
 import AdminLayout from "@/components/layouts/admin/AdminLayout";
 import AppLayout from "@/components/layouts/app/app-layout";
 import AuthLayout from "@/components/layouts/auth/AuthLayout";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import CompanyManagementPage from "@/pages/admin/CompanyManagementPage";
 import NotificationsManagement from "@/pages/admin/NotificationsManagement";
+import PackagesManagement from "@/pages/admin/PackagesManagement";
+import PostsManagement from "@/pages/admin/PostsManagement";
+import RefundManagement from "@/pages/admin/RefundManagement";
+import { ReportsManagement } from "@/pages/admin/ReportsManagement";
 import UsersManagement from "@/pages/admin/UsersManagement";
 
 // Auth pages
@@ -89,8 +95,15 @@ function Router() {
 
       {/* Admin routes */}
       <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<UsersManagement />} />
+        <Route path="packages" element={<PackagesManagement />} />
+        <Route path="posts" element={<PostsManagement />} />
         <Route path="notifications" element={<NotificationsManagement />} />
+        <Route path="reports" element={<ReportsManagement />} />
+        <Route path="refunds" element={<RefundManagement />} />
+        <Route path="companies" element={<CompanyManagementPage />} />
       </Route>
 
       {/* Public Job Routes - Anyone can view */}
