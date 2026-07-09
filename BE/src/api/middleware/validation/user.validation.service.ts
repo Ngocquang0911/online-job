@@ -23,6 +23,20 @@ export async function validateEmailAvailability(email: string): Promise<void> {
   }
 }
 
+/**
+ * Checks if phone number is already registered
+ * @throws Error if phone number already exists
+ */
+export async function validatePhoneAvailability(phone: string): Promise<void> {
+  if (!phone) return;
+  const existingUser = await User.findOne({ phone: phone.trim() });
+
+  if (existingUser) {
+    throw new Error("Số điện thoại đã được đăng ký sử dụng");
+  }
+}
+
+
 // ==================== USER ACCOUNT VALIDATION ====================
 
 /**

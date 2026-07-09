@@ -23,7 +23,7 @@ export const VALIDATION_RULES = {
   MAX_NAME_LENGTH: 100,
   
   // Phone
-  PHONE_PATTERN: /^[0-9+\-() ]{8,20}$/,
+  PHONE_PATTERN: /^0[0-9+\-() ]{7,19}$/,
   
   // Job & Application
   MIN_TITLE_LENGTH: 3,

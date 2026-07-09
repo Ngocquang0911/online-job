@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema(
     birthday: { type: Date, required: true },
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
-    phone: { type: String, required: true, trim: true },
+    phone: { type: String, required: true, unique: true, trim: true },
 
     companyId: {
       type: Schema.Types.ObjectId,

@@ -71,6 +71,7 @@ export {
 // User validation services (business logic validations)
 export {
   validateEmailAvailability,
+  validatePhoneAvailability,
   validateUserAccount,
   checkAccountLockStatus,
   validatePasswordAndUpdateAttempts,

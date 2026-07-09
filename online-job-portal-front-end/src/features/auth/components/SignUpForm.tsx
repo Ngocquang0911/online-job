@@ -235,7 +235,12 @@ export const SignUpForm = () => {
 
               {/* Desktop Bottom Text */}
               <div className="hidden lg:block px-12 pb-8 text-right">
-                <span className="text-xl text-orange-500 font-medium">Do you have an account?</span>
+                <span className="text-xl text-orange-500 font-medium">
+                  Do you have an account?{" "}
+                  <Link to="/auth/sign-in" className="hover:underline">
+                    Sign in
+                  </Link>
+                </span>
               </div>
             </div>
 
@@ -243,12 +248,6 @@ export const SignUpForm = () => {
             <div className="hidden lg:flex w-[45%] bg-[#F97A00] relative flex-col items-center justify-center gap-12">
               <RoleBubble selectedRole={selectedRole} onRoleChange={handleRoleChange} />
               <h2 className="text-5xl font-bold text-white">Sign Up</h2>
-              <Link
-                to="/auth/sign-in"
-                className="absolute bottom-8 left-8 text-white text-xl font-medium hover:underline"
-              >
-                Sign in
-              </Link>
             </div>
           </div>
 

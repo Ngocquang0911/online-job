@@ -59,9 +59,9 @@ export const validateUserRegistration = (
     if (typeof phone !== "string") {
       errors.push("Số điện thoại phải là chuỗi");
     } else if (phone.trim().length > 0) {
-      const phoneRegex = /^[0-9+\-() ]{8,20}$/;
+      const phoneRegex = /^0[0-9+\-() ]{7,19}$/;
       if (!phoneRegex.test(phone.trim())) {
-        errors.push("Số điện thoại không hợp lệ (8-20 ký tự, chỉ chứa số, +, -, (, ), khoảng trắng)");
+        errors.push("Số điện thoại không hợp lệ (phải bắt đầu bằng số 0, dài từ 8-20 ký tự)");
       }
     }
   }
@@ -168,9 +168,9 @@ export const validateRecruiterRegistration = (
   if (!phone || typeof phone !== "string" || phone.trim().length === 0) {
     errors.push("Số điện thoại không được để trống");
   } else {
-    const phoneRegex = /^[0-9+\-() ]{8,20}$/;
+    const phoneRegex = /^0[0-9+\-() ]{7,19}$/;
     if (!phoneRegex.test(phone.trim())) {
-      errors.push("Số điện thoại không hợp lệ (8-20 ký tự, chỉ chứa số, +, -, (, ), khoảng trắng)");
+      errors.push("Số điện thoại không hợp lệ (phải bắt đầu bằng số 0, dài từ 8-20 ký tự)");
     }
   }
 
